@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Coupon Points Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .calculator-section {
+            padding: 30px;
+        }
+
+        .input-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid #e0e7ff;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #4c51bf;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e0e7ff;
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .result-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .points-required {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .points-required h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .points-value {
+            font-size: 3em;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .points-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .info-list {
+            padding: 30px;
+        }
+
+        .info-list h3 {
+            color: #4c51bf;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1em;
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: #059669;
+            font-size: 1.2em;
+        }
+
+        .highlight-item {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border-color: #10b981;
+        }
+
+        .highlight-item .info-value {
+            color: #065f46;
+            font-size: 1.4em;
+        }
+
+        .note {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .note h4 {
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .note p {
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .points-value {
+                font-size: 2.5em;
+            }
+
+            .info-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎫 Partner Coupon Calculator</h1>
+            <p>Calculate points required for partner coupons and redemption values</p>
+        </div>
+
+        <div class="calculator-section">
+            <div class="input-container">
+                <h2 class="section-title">Calculator Inputs</h2>
+                
+                <div class="input-grid">
+                    <div class="form-group">
+                        <label for="hotelPointValue">Hotel Point Value (₹ per point)</label>
+                        <input type="number" id="hotelPointValue" value="0.50" step="0.01" min="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="partnerCouponValue">Partner Coupon Value (₹)</label>
+                        <input type="number" id="partnerCouponValue" value="500" min="0" step="10">
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculatePoints()">
+                    Calculate Required Points 🚀
+                </button>
+
+                <div class="note">
+                    <h4>How to Use:</h4>
+                    <p>Enter the hotel's point value and the partner coupon value you want to offer. The calculator will determine how many points are needed to redeem that coupon and show the complete value breakdown.</p>
+                </div>
+            </div>
+
+            <div class="result-container">
+                <div class="result-header">
+                    <h2>Points Required for Partner Coupon</h2>
+                    <p>Based on your inputs, here's the calculation</p>
+                </div>
+
+                <div class="points-required">
+                    <h3>Total Points Required</h3>
+                    <div class="points-value" id="pointsRequired">1,000</div>
+                    <div class="points-label">Points needed for redemption</div>
+                </div>
+
+                <div class="info-list">
+                    <h3>Value Breakdown</h3>
+                    
+                    <div class="info-item">
+                        <div class="info-label">1. Points Accumulated</div>
+                        <div class="info-value" id="pointsAccumulated">1,000 points</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">2. Value of Points for Bloom Hotel</div>
+                        <div class="info-value" id="hotelValue">₹500</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label">3. Redemption Value of Those Accumulated Points with Partner</div>
+                        <div class="info-value" id="partnerRedemptionValue">₹500</div>
+                    </div>
+
+                    <div class="info-item highlight-item">
+                        <div class="info-label">4. Total Value of Redemption</div>
+                        <div class="info-value" id="totalRedemptionValue">₹500</div>
+                    </div>
+                </div>
+
+                <div class="note">
+                    <h4>💡 Value Proposition:</h4>
+                    <p><strong>Customer Benefit:</strong> Redeem hotel loyalty points for partner coupons at full value<br>
+                    <strong>Conversion Rate:</strong> <span id="conversionRate">1 point = ₹0.50</span><br>
+                    <strong>Redemption Efficiency:</strong> 100% value retention in partner redemption</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculatePoints() {
+            const hotelPointValue = parseFloat(document.getElementById('hotelPointValue').value) || 0.50;
+            const partnerCouponValue = parseFloat(document.getElementById('partnerCouponValue').value) || 500;
+
+            // Calculate points required
+            const pointsRequired = Math.ceil(partnerCouponValue / hotelPointValue);
+            
+            // Calculate values
+            const hotelValue = pointsRequired * hotelPointValue;
+            const partnerRedemptionValue = partnerCouponValue; // Partner coupon value
+            const totalRedemptionValue = partnerRedemptionValue; // Same as partner value
+
+            // Update display
+            document.getElementById('pointsRequired').textContent = pointsRequired.toLocaleString();
+            document.getElementById('pointsAccumulated').textContent = pointsRequired.toLocaleString() + ' points';
+            document.getElementById('hotelValue').textContent = '₹' + hotelValue.toFixed(2);
+            document.getElementById('partnerRedemptionValue').textContent = '₹' + partnerRedemptionValue.toFixed(2);
+            document.getElementById('totalRedemptionValue').textContent = '₹' + totalRedemptionValue.toFixed(2);
+            document.getElementById('conversionRate').textContent = '1 point = ₹' + hotelPointValue.toFixed(2);
+        }
+
+        // Initial calculation
+        calculatePoints();
+
+        // Real-time updates
+        document.getElementById('hotelPointValue').addEventListener('input', calculatePoints);
+        document.getElementById('partnerCouponValue').addEventListener('input', calculatePoints);
+    </script>
+</body>
+</html>
